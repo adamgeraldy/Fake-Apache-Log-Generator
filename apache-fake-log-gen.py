@@ -10,6 +10,7 @@ import sys
 import argparse
 from faker import Faker
 from random import randrange
+import os
 
 
 class switch(object):
@@ -57,14 +58,19 @@ outFileName = outFolderName + 'http-' + timestr + '.log' if not file_prefix else
 
 for case in switch(output_type):
     if case('LOG'):
+        if not os.path.exists(outFolderName):
+            os.mkdir(outFolderName)
         f = open(outFileName, 'w')
         break
     if case('GZ'):
+        if not os.path.exists(outFolderName):
+            os.mkdir(outFolderName)
         f = gzip.open(outFileName + '.gz', 'w')
         break
     if case('CONSOLE'): pass
     if case():
         f = sys.stdout
+        break
 
 ## Content of log
 response = ["200", "404", "500", "301", "504"]
