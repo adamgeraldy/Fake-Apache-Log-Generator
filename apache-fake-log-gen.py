@@ -52,7 +52,8 @@ faker = Faker()
 timestr = time.strftime("%Y%m%d%H%M%S")
 otime = datetime.datetime.now()
 
-outFileName = 'http-' + timestr + '.log' if not file_prefix else file_prefix + '_elasticloadbalancing_log_' + timestr + '.log'
+outFolderName = "logs/"
+outFileName = outFolderName + 'http-' + timestr + '.log' if not file_prefix else file_prefix + '_elasticloadbalancing_log_' + timestr + '.log'
 
 for case in switch(output_type):
     if case('LOG'):
@@ -69,9 +70,8 @@ for case in switch(output_type):
 response = ["200", "404", "500", "301", "504"]
 verb = ["GET", "POST", "DELETE", "PUT"]
 user = ["asuna", "mara", "kirana", "nona"]
-lalu = ["user-identifier", "user-identifier", "user-identifier", "user-identifier"]
-resources = ["/list", "courses/285528/modules/776924/", "courses/285528/modules", "/explore", "/search/tag/list",
-"/app/main/posts", "/posts/posts/explore", "/questions/856776/item_versions"]
+resources = ["/blogs/gametech/", "/blogs/big-data/", "/blogs/containers/", "/blogs/", "/contact-us/",
+"/marketplace/", "/getting-started/", "/solutions/"]
 
 flag = True
 while (flag):
@@ -84,14 +84,12 @@ while (flag):
     dt = otime.strftime('%d/%b/%Y:%H:%M:%S')
     vrb = numpy.random.choice(verb, p=[0.6, 0.1, 0.1, 0.2])
     usr = numpy.random.choice(user, p=[0.6, 0.1, 0.1, 0.2])
-    ll = numpy.random.choice(lalu, p=[0.6, 0.1, 0.1, 0.2])
     uri = random.choice(resources)
     if uri.find("apps") > 0:
         uri += str(random.randint(1000, 10000))
     resp = numpy.random.choice(response, p=[0.6, 0.04, 0.02, 0.04, 0.3])
     byt = int(random.gauss(5000, 50))
-    f.write('%s %s %s [%s] "%s https://learningcatalytics.com:443%s HTTP/1.0" %s %s\n' % (
-    ip, ll, usr, dt, vrb, uri, resp, byt))
+    f.write('{"time": "%s", "remoteIP": "%s", "user": "%s", "host": "https://aws.amazon.com%s", "method": "%s", "status": "%s", "byteSize": "%s"}\n' % (dt, ip, usr, uri, vrb, resp, byt))
     f.flush()
     log_lines = log_lines - 1
     flag = False if log_lines == 0 else True
